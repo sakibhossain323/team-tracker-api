@@ -1,6 +1,6 @@
 import { Router } from "express";
-import teamsRouter from "./routes/teams.js";
-import objectivesRouter from "./routes/objectives.js";
+import teamsRouter from "./routes/teams";
+import objectivesRouter from "./routes/objectives";
 
 const router = Router();
 

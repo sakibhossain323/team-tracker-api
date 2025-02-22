@@ -1,18 +1,23 @@
 {
     "name": "team-tracker",
     "version": "1.0.0",
-    "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "nodemon --env-file .env ./src/index.js",
-        "start": "node ./src/index.js"
-    },
     "author": "",
     "license": "ISC",
     "description": "",
-    "dependencies": {
-        "express": "^4.21.2",
-        "nodemon": "^3.1.9"
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "tsx --env-file=.env --watch src/index.ts",
+        "build": "tsc",
+        "start": "node --env-file=.env dist/index.js"
     },
-    "type": "module"
+    "dependencies": {
+        "express": "^4.21.2"
+    },
+    "devDependencies": {
+        "@tsconfig/node-lts": "^22.0.1",
+        "@types/express": "^5.0.0",
+        "@types/node": "^22.13.5",
+        "tsx": "^4.19.3",
+        "typescript": "^5.7.3"
+    }
 }
