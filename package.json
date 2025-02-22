@@ -1,0 +1,18 @@
+{
+    "name": "team-tracker",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "nodemon --env-file .env ./src/index.js",
+        "start": "node ./src/index.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "dependencies": {
+        "express": "^4.21.2",
+        "nodemon": "^3.1.9"
+    },
+    "type": "module"
+}
