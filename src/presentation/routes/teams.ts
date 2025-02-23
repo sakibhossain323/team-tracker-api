@@ -5,6 +5,8 @@ const router = Router();
 router.get("/", (req, res) => {
     console.log(req.headers);
     console.log(req.query);
+    console.log(req.user);
+    console.log(req.session);
     res.status(200).send([
         { id: 1, name: "team1" },
         { id: 2, name: "team2" },
