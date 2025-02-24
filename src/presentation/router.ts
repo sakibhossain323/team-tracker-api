@@ -1,16 +1,11 @@
-import e, { Router } from "express";
-import authRouter from "./routes/auth";
-import teamsRouter from "./routes/teams";
-import objectivesRouter from "./routes/objectives";
+import { Router } from "express";
+import authRoute from "./routes/authRoute";
+import teamsRoute from "./routes/teamsRoute";
 import protectRoute from "./authConfig/protectRoute";
-import errorHandler from "./errorHandler";
 
 const router = Router();
 
-router.use("/auth", authRouter);
-router.use("/teams", protectRoute, teamsRouter);
-router.use("/objectives", objectivesRouter);
-
-router.use("/api", router);
+router.use(authRoute);
+router.use(protectRoute, teamsRoute);
 
 export default router;

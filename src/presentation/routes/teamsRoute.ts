@@ -2,8 +2,9 @@ import { Router } from "express";
 import teamServices from "@/application/services/teamServices";
 
 const router = Router();
+const PREFIX = "/api/teams";
 
-router.get("/", (req, res) => {
+router.get(PREFIX + "/", (req, res) => {
     console.log(req.headers);
     console.log(req.query);
     console.log(req.user);
@@ -14,12 +15,12 @@ router.get("/", (req, res) => {
     ]);
 });
 
-router.get("/:id", (req, res) => {
+router.get(PREFIX + "/:id", (req, res) => {
     const id = parseInt(req.params.id);
     res.status(200).send({ id: id, name: "team1" });
 });
 
-router.post("/", async (req, res, next) => {
+router.post(PREFIX + "/", async (req, res, next) => {
     try {
         await teamServices.createTeam(req.body);
         res.status(201).send({ message: "Created!" });
@@ -28,13 +29,13 @@ router.post("/", async (req, res, next) => {
     }
 });
 
-router.patch("/:id", (req, res) => {
+router.patch(PREFIX + "/:id", (req, res) => {
     console.log(req.params);
     console.log(req.body);
     res.status(200).send({ message: "Updated!" });
 });
 
-router.delete("/:id", (req, res) => {
+router.delete(PREFIX + "/:id", (req, res) => {
     console.log(req.params);
     res.status(204).send();
 });
