@@ -10,7 +10,12 @@
         "build": "tsc",
         "start": "node --env-file=.env dist/index.js"
     },
+    "prisma": {
+        "schema": "src/infrastructure/prisma/schema.prisma"
+    },
     "dependencies": {
+        "@prisma/client": "^6.4.1",
+        "connect-pg-simple": "^10.0.0",
         "express": "^4.21.2",
         "express-session": "^1.18.1",
         "passport": "^0.7.0",
@@ -18,11 +23,13 @@
     },
     "devDependencies": {
         "@tsconfig/node-lts": "^22.0.1",
+        "@types/connect-pg-simple": "^7.0.3",
         "@types/express": "^5.0.0",
         "@types/express-session": "^1.18.1",
         "@types/node": "^22.13.5",
         "@types/passport": "^1.0.17",
         "@types/passport-local": "^1.0.38",
+        "prisma": "^6.4.1",
         "tsx": "^4.19.3",
         "typescript": "^5.7.3"
     }

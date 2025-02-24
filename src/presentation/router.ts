@@ -1,8 +1,9 @@
-import { Router } from "express";
+import e, { Router } from "express";
 import authRouter from "./routes/auth";
 import teamsRouter from "./routes/teams";
 import objectivesRouter from "./routes/objectives";
 import protectRoute from "./authConfig/protectRoute";
+import errorHandler from "./errorHandler";
 
 const router = Router();
 

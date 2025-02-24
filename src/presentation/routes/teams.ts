@@ -1,4 +1,5 @@
 import { Router } from "express";
+import teamServices from "@/application/services/teamServices";
 
 const router = Router();
 
@@ -18,9 +19,13 @@ router.get("/:id", (req, res) => {
     res.status(200).send({ id: id, name: "team1" });
 });
 
-router.post("/", (req, res) => {
-    console.log(req.body);
-    res.status(201).send({ message: "Created!" });
+router.post("/", async (req, res, next) => {
+    try {
+        await teamServices.createTeam(req.body);
+        res.status(201).send({ message: "Created!" });
+    } catch (err) {
+        next(err);
+    }
 });
 
 router.patch("/:id", (req, res) => {
