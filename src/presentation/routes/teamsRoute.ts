@@ -1,5 +1,6 @@
 import { Router } from "express";
 import teamServices from "@/application/services/teamServices";
+import teamsController from "../controllers/teamsController";
 
 const router = Router();
 const PREFIX = "/api/teams";
@@ -22,7 +23,7 @@ router.get(PREFIX + "/:id", (req, res) => {
 
 router.post(PREFIX + "/", async (req, res, next) => {
     try {
-        await teamServices.createTeam(req.body);
+        await teamsController.createTeam(req);
         res.status(201).send({ message: "Created!" });
     } catch (err) {
         next(err);

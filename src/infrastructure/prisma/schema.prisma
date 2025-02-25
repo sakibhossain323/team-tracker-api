@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(uuid())
+  id           Int   @id @default(autoincrement())
   email        String   @unique
   username     String   @unique
   password     String
@@ -31,11 +31,11 @@ model Team {
 }
 
 model Membership {
-  id           String   @id @default(uuid())
+  @@id([userId, teamId])
   role         String
-  createdAt    DateTime @default(now())
+  joinedAt    DateTime @default(now())
   user         User   @relation(fields: [userId], references: [id])
-  userId       String
+  userId       Int
   team         Team   @relation(fields: [teamId], references: [id])
   teamId       Int
 }

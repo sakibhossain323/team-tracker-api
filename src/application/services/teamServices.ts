@@ -1,43 +1,27 @@
 import prisma from "@/infrastructure/prisma/client";
-import e from "express";
+import { CreateTeamDto, UserDto } from "@/application/dtos";
 
-class TeamServices {
-    async createTeam(data: any) {
-        return await prisma.team.create({
-            data,
-        });
-    }
-
-    async getTeams() {
-        return await prisma.team.findMany();
-    }
-
-    async getTeamById(id: number) {
-        return await prisma.team.findUnique({
-            where: {
-                id,
+const createTeam = async (teamDto: CreateTeamDto, userDto: UserDto) => {
+    return await prisma.team.create({
+        data: {
+            name: teamDto.name,
+            description: teamDto.description,
+            memberships: {
+                create: [
+                    {
+                        role: "ADMIN",
+                        user: {
+                            connect: {
+                                id: userDto.id,
+                            },
+                        },
+                    },
+                ],
             },
-        });
-    }
+        },
+    });
+};
 
-    async updateTeam(id: number, data: any) {
-        return await prisma.team.update({
-            where: {
-                id,
-            },
-            data,
-        });
-    }
-
-    async deleteTeam(id: number) {
-        return await prisma.team.delete({
-            where: {
-                id,
-            },
-        });
-    }
-}
-
-const teamServices = new TeamServices();
-
-export default teamServices;
+export default {
+    createTeam,
+};
