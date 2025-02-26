@@ -15,6 +15,6 @@ export class NotFoundError extends ResultError {
 
 export class ForbiddenError extends ResultError {
     constructor() {
-        super(403, "Forbidden");
+        super(403, "Access denied");
     }
 }
