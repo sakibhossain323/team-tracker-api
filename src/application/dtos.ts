@@ -24,6 +24,12 @@ export type CreateTeamDto = {
     description: string;
 };
 
+export type CreateObjectiveDto = {
+    title: string;
+    description: string;
+    teamId: number;
+};
+
 export type UserDto = {
     id: number;
     username: string;

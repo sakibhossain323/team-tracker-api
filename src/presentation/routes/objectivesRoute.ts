@@ -1,16 +1,13 @@
 import { Router } from "express";
+import objectivesController from "../controllers/objectivesController";
 
+const PREFIX = "/api/teams/:teamId/objectives";
 const router = Router();
 
-router.post("/", (req, res) => {
-    console.log(req.headers);
-    console.log(req.body);
-    res.status(201).send({ message: "Created!" });
-});
-
-router.get("/", (req, res) => {
-    console.log(req.headers);
-    res.send({ message: "Hello World!" });
-});
+router.post(PREFIX + "/", objectivesController.createObjective);
+router.get(PREFIX + "/", objectivesController.getAllObjectives);
+router.get(PREFIX + "/:id", objectivesController.getObjectiveById);
+router.patch(PREFIX + "/:id", objectivesController.updateObjective);
+router.delete(PREFIX + "/:id", objectivesController.deleteObjective);
 
 export default router;

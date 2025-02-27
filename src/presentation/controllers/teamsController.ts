@@ -1,5 +1,5 @@
 import e from "express";
-import teamServices from "@/application/services/teamServices";
+import teamsService from "@/application/services/teamsService";
 
 const createTeam = async (
     req: e.Request,
@@ -7,7 +7,7 @@ const createTeam = async (
     next: e.NextFunction
 ) => {
     try {
-        const result = await teamServices.createTeam(req.body, req.user!);
+        const result = await teamsService.createTeam(req.body, req.user!);
         res.status(201).send(result);
     } catch (err) {
         next(err);
@@ -20,7 +20,7 @@ const getAllTeams = async (
     next: e.NextFunction
 ) => {
     try {
-        const teams = await teamServices.getAllTeams(req.user!);
+        const teams = await teamsService.getAllTeams(req.user!);
         res.status(200).send(teams);
     } catch (err) {
         next(err);
@@ -33,7 +33,7 @@ const getTeamById = async (
     next: e.NextFunction
 ) => {
     try {
-        const result = await teamServices.getTeamById(
+        const result = await teamsService.getTeamById(
             Number(req.params.id),
             req.user!
         );

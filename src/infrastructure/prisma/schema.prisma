@@ -28,6 +28,7 @@ model Team {
   description  String?
   createdAt    DateTime @default(now())
   memberships  Membership[]
+  objectives   Objective[]
 }
 
 model Membership {
@@ -36,6 +37,15 @@ model Membership {
   joinedAt    DateTime @default(now())
   user         User   @relation(fields: [userId], references: [id])
   userId       Int
+  team         Team   @relation(fields: [teamId], references: [id])
+  teamId       Int
+}
+
+model Objective {
+  id           Int @id @default(autoincrement())
+  title        String
+  description  String?
+  createdAt    DateTime @default(now())
   team         Team   @relation(fields: [teamId], references: [id])
   teamId       Int
 }

@@ -1,7 +1,6 @@
 import prisma from "@/infrastructure/prisma/client";
 import { CreateTeamDto, Result, UserDto } from "@/application/dtos";
 import { ForbiddenError, NotFoundError } from "@/application/resultErrors";
-import { join } from "path";
 
 const createTeam = async (teamDto: CreateTeamDto, userDto: UserDto) => {
     return await prisma.team.create({
