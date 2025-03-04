@@ -20,6 +20,7 @@ model User {
   password     String
   registeredAt DateTime @default(now())
   memberships  Membership[]
+  tasks        Task[]
 }
 
 model Team {
@@ -48,4 +49,17 @@ model Objective {
   createdAt    DateTime @default(now())
   team         Team   @relation(fields: [teamId], references: [id])
   teamId       Int
+  tasks        Task[]
+}
+
+model Task {
+  id           Int @id @default(autoincrement())
+  title        String
+  description  String?
+  createdAt    DateTime @default(now())
+  objective    Objective   @relation(fields: [objectiveId], references: [id])
+  objectiveId  Int
+  assignee     User?   @relation(fields: [assigneeId], references: [id])
+  assigneeId   Int?
+  status       String
 }

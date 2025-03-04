@@ -21,14 +21,38 @@ export class Result {
 
 export type CreateTeamDto = {
     name: string;
-    description: string;
+    description: string | null;
 };
 
 export type CreateObjectiveDto = {
     title: string;
-    description: string;
+    description: string | null;
     teamId: number;
 };
+
+export type CreateTaskDto = {
+    title: string;
+    description: string | null;
+    objectiveId: number;
+    teamId: number;
+    assigneeId: number | null;
+    stautes: string;
+};
+
+export type UpdateTaskDto = {
+    id: number;
+    title: string;
+    description: string | null;
+    objectiveId: number;
+    teamId: number;
+    assigneeId: number | null;
+    stautes: string;
+};
+
+// export type TaskScope = {
+//     objectiveId: number;
+//     teamId: number;
+// };
 
 export type UserDto = {
     id: number;
