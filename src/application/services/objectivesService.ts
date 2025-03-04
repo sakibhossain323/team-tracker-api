@@ -10,7 +10,6 @@ import { hasMembership } from "@/infrastructure/repositories/membershipsReposito
 import objectivesRepository from "@/infrastructure/repositories/objectivesRepository";
 import tasksRepository from "@/infrastructure/repositories/tasksRepository";
 import { taskStatus } from "@/domain/constants";
-import { count } from "console";
 
 const validate = async (userId: number, teamId: number) => {
     const has = await hasMembership(userId, teamId);
@@ -154,24 +153,14 @@ const getObjectiveStatus = async (
         id,
         taskStatus.COMPLETED
     );
-    const total = notStarted + inProgress + completed;
-    const notStartedPercentage = (notStarted / total) * 100;
-    const inProgressPercentage = (inProgress / total) * 100;
-    const completedPercentage = (completed / total) * 100;
-
+    const Total = notStarted + inProgress + completed;
     return Result.success({
-        Total: total,
-        [taskStatus.NOT_STARTED]: {
-            count: notStarted,
-            percentage: notStartedPercentage,
-        },
-        [taskStatus.IN_PROGRESS]: {
-            count: inProgress,
-            percentage: inProgressPercentage,
-        },
-        [taskStatus.COMPLETED]: {
-            count: completed,
-            percentage: completedPercentage,
+        Total,
+        Completed: ((completed / Total) * 100).toFixed(2) + "%",
+        Details: {
+            [taskStatus.NOT_STARTED]: notStarted,
+            [taskStatus.IN_PROGRESS]: inProgress,
+            [taskStatus.COMPLETED]: completed,
         },
     });
 };
