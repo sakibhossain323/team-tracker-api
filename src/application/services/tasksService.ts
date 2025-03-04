@@ -13,7 +13,7 @@ import {
     ValidationError,
 } from "@/application/resultErrors";
 import { hasMembership } from "@/infrastructure/repositories/membershipsRepository";
-import { isObjectiveValid } from "@/infrastructure/repositories/objectivesRepository";
+import objectivesRepository from "@/infrastructure/repositories/objectivesRepository";
 import tasksRepository from "@/infrastructure/repositories/tasksRepository";
 
 const validateScope = async (
@@ -26,8 +26,11 @@ const validateScope = async (
         return Result.fail(new ForbiddenError());
     }
 
-    const isValid = await isObjectiveValid(teamId, objectiveId);
-    if (!isValid) {
+    const objective = await objectivesRepository.findByIdAndTeamId(
+        objectiveId,
+        teamId
+    );
+    if (objective === null) {
         return Result.fail(new NotFoundError("Objective", objectiveId));
     }
 
