@@ -30,6 +30,13 @@ export type CreateObjectiveDto = {
     teamId: number;
 };
 
+export type UpdateObjectiveDto = {
+    id: number;
+    title: string;
+    description: string | null;
+    teamId: number;
+};
+
 export type CreateTaskDto = {
     title: string;
     description: string | null;

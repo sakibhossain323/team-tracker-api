@@ -1,5 +1,10 @@
 import prisma from "@/infrastructure/prisma/client";
-import { CreateObjectiveDto, Result, UserDto } from "@/application/dtos";
+import {
+    CreateObjectiveDto,
+    Result,
+    UpdateObjectiveDto,
+    UserDto,
+} from "@/application/dtos";
 import { ForbiddenError, NotFoundError } from "@/application/resultErrors";
 import { hasMembership } from "@/infrastructure/repositories/membershipsRepository";
 import objectivesRepository from "@/infrastructure/repositories/objectivesRepository";
@@ -71,8 +76,63 @@ const getObjectiveById = async (
     return Result.success(objective);
 };
 
+const updateObjective = async (
+    objectiveDto: UpdateObjectiveDto,
+    userDto: UserDto
+) => {
+    const { id, teamId } = objectiveDto;
+
+    const validation = await validate(userDto.id, teamId);
+    if (validation.error) {
+        return validation;
+    }
+
+    const objective = await objectivesRepository.findByIdAndTeamId(id, teamId);
+    if (objective === null) {
+        return Result.fail(new NotFoundError("Objective", id));
+    }
+
+    const updatedObjective = await prisma.objective.update({
+        where: {
+            id: id,
+        },
+        data: {
+            title: objectiveDto.title,
+            description: objectiveDto.description,
+        },
+    });
+
+    return Result.success(updatedObjective);
+};
+
+const deleteObjective = async (
+    id: number,
+    teamId: number,
+    userDto: UserDto
+) => {
+    const validation = await validate(userDto.id, teamId);
+    if (validation.error) {
+        return validation;
+    }
+
+    const objective = await objectivesRepository.findByIdAndTeamId(id, teamId);
+    if (objective === null) {
+        return Result.fail(new NotFoundError("Objective", id));
+    }
+
+    await prisma.objective.delete({
+        where: {
+            id: id,
+        },
+    });
+
+    return Result.success(null);
+};
+
 export default {
     createObjective,
     getAllObjectives,
     getObjectiveById,
+    updateObjective,
+    deleteObjective,
 };

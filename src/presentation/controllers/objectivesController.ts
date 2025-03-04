@@ -1,15 +1,18 @@
 import objectivesService from "@/application/services/objectivesService";
-import e from "express";
+import { Request, Response, NextFunction } from "express";
+
+const getId = (req: Request) => Number(req.params.id);
+const getTeamId = (req: Request) => Number(req.params.teamId);
 
 const createObjective = async (
-    req: e.Request,
-    res: e.Response,
-    next: e.NextFunction
+    req: Request,
+    res: Response,
+    next: NextFunction
 ) => {
     try {
         console.log(req.body);
         const result = await objectivesService.createObjective(
-            { ...req.body, teamId: Number(req.params.teamId) },
+            { ...req.body, teamId: getTeamId(req) },
             req.user!
         );
         if (result.success) {
@@ -25,13 +28,13 @@ const createObjective = async (
 };
 
 const getAllObjectives = async (
-    req: e.Request,
-    res: e.Response,
-    next: e.NextFunction
+    req: Request,
+    res: Response,
+    next: NextFunction
 ) => {
     try {
         const result = await objectivesService.getAllObjectives(
-            Number(req.params.teamId),
+            getTeamId(req),
             req.user!
         );
         if (result.success) {
@@ -47,14 +50,14 @@ const getAllObjectives = async (
 };
 
 const getObjectiveById = async (
-    req: e.Request,
-    res: e.Response,
-    next: e.NextFunction
+    req: Request,
+    res: Response,
+    next: NextFunction
 ) => {
     try {
         const result = await objectivesService.getObjectiveById(
-            Number(req.params.id),
-            Number(req.params.teamId),
+            getId(req),
+            getTeamId(req),
             req.user!
         );
         if (result.success) {
@@ -70,24 +73,45 @@ const getObjectiveById = async (
 };
 
 const updateObjective = async (
-    req: e.Request,
-    res: e.Response,
-    next: e.NextFunction
+    req: Request,
+    res: Response,
+    next: NextFunction
 ) => {
     try {
-        res.status(200).send({ message: "Updated!" });
+        const result = await objectivesService.updateObjective(
+            { ...req.body, id: getId(req), teamId: getTeamId(req) },
+            req.user!
+        );
+        if (result.success) {
+            res.status(200).send(result.data);
+        } else if (result.error) {
+            res.status(result.error.statusCode).send({
+                message: result.error.message,
+            });
+        }
     } catch (err) {
         next(err);
     }
 };
 
 const deleteObjective = async (
-    req: e.Request,
-    res: e.Response,
-    next: e.NextFunction
+    req: Request,
+    res: Response,
+    next: NextFunction
 ) => {
     try {
-        res.status(200).send({ message: "Deleted!" });
+        const result = await objectivesService.deleteObjective(
+            getId(req),
+            getTeamId(req),
+            req.user!
+        );
+        if (result.success) {
+            res.status(204).send();
+        } else if (result.error) {
+            res.status(result.error.statusCode).send({
+                message: result.error.message,
+            });
+        }
     } catch (err) {
         next(err);
     }
