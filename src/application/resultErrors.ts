@@ -18,3 +18,9 @@ export class ForbiddenError extends ResultError {
         super(403, "Access denied");
     }
 }
+
+export class ValidationError extends ResultError {
+    constructor(message: string) {
+        super(400, message);
+    }
+}

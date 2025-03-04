@@ -66,9 +66,40 @@ const getTaskById = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
-const updateTask = async (req: Request, res: Response, next: NextFunction) => {
+const updateTaskDetails = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
     try {
-        const result = await tasksService.updateTask(
+        const result = await tasksService.updateTaskDetails(
+            {
+                ...req.body,
+                id: getId(req),
+                teamId: getTeamId(req),
+                objectiveId: getObjId(req),
+            },
+            req.user!
+        );
+        if (result.success) {
+            res.status(200).send(result.data);
+        } else if (result.error) {
+            res.status(result.error.statusCode).send({
+                message: result.error.message,
+            });
+        }
+    } catch (error) {
+        next(error);
+    }
+};
+
+const updateTaskStatus = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const result = await tasksService.updateTaskStatus(
             {
                 ...req.body,
                 id: getId(req),
@@ -114,6 +145,7 @@ export default {
     createTask,
     getAllTasks,
     getTaskById,
-    updateTask,
+    updateTaskDetails,
+    updateTaskStatus,
     deleteTask,
 };

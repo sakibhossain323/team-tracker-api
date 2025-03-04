@@ -39,7 +39,7 @@ export type CreateTaskDto = {
     stautes: string;
 };
 
-export type UpdateTaskDto = {
+export type UpdateTaskDetailsDto = {
     id: number;
     title: string;
     description: string | null;
@@ -49,10 +49,12 @@ export type UpdateTaskDto = {
     stautes: string;
 };
 
-// export type TaskScope = {
-//     objectiveId: number;
-//     teamId: number;
-// };
+export type UpdateTaskStatusDto = {
+    id: number;
+    teamId: number;
+    objectiveId: number;
+    status: string;
+};
 
 export type UserDto = {
     id: number;

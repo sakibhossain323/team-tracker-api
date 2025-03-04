@@ -3,10 +3,15 @@ import prisma from "@/infrastructure/prisma/client";
 import {
     CreateTaskDto,
     Result,
-    UpdateTaskDto,
+    UpdateTaskDetailsDto,
+    UpdateTaskStatusDto,
     UserDto,
 } from "@/application/dtos";
-import { ForbiddenError, NotFoundError } from "@/application/resultErrors";
+import {
+    ForbiddenError,
+    NotFoundError,
+    ValidationError,
+} from "@/application/resultErrors";
 import { hasMembership } from "@/infrastructure/repositories/membershipsRepository";
 import { isObjectiveValid } from "@/infrastructure/repositories/objectivesRepository";
 import tasksRepository from "@/infrastructure/repositories/tasksRepository";
@@ -88,7 +93,10 @@ const getTaskById = async (
     return Result.success(task);
 };
 
-const updateTask = async (taskDto: UpdateTaskDto, userDto: UserDto) => {
+const updateTaskDetails = async (
+    taskDto: UpdateTaskDetailsDto,
+    userDto: UserDto
+) => {
     const { id, teamId, objectiveId } = taskDto;
 
     const validation = await validateScope(userDto.id, teamId, objectiveId);
@@ -108,6 +116,43 @@ const updateTask = async (taskDto: UpdateTaskDto, userDto: UserDto) => {
         data: {
             title: taskDto.title,
             description: taskDto.description,
+        },
+    });
+
+    return Result.success(updatedTask);
+};
+
+const updateTaskStatus = async (
+    taskStatusDto: UpdateTaskStatusDto,
+    userDto: UserDto
+) => {
+    const { id, teamId, objectiveId, status } = taskStatusDto;
+
+    const validation = await validateScope(userDto.id, teamId, objectiveId);
+    if (validation.error) {
+        return validation;
+    }
+
+    const task = await tasksRepository.findTaskByIdAndObjId(id, objectiveId);
+    if (task === null) {
+        return Result.fail(new NotFoundError("Task", id));
+    }
+
+    if (!Object.values(taskStatus).includes(status)) {
+        const validStatuses = Object.values(taskStatus).join(", ");
+        return Result.fail(
+            new ValidationError(
+                `Invalid status! Valid values are: ${validStatuses}`
+            )
+        );
+    }
+
+    const updatedTask = await prisma.task.update({
+        where: {
+            id,
+        },
+        data: {
+            status,
         },
     });
 
@@ -143,6 +188,7 @@ export default {
     createTask,
     getAllTasks,
     getTaskById,
-    updateTask,
+    updateTaskDetails,
+    updateTaskStatus,
     deleteTask,
 };
