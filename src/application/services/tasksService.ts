@@ -85,7 +85,7 @@ const getTaskById = async (
         return validation;
     }
 
-    const task = await tasksRepository.findTaskByIdAndObjId(id, objectiveId);
+    const task = await tasksRepository.findByIdAndObjId(id, objectiveId);
     if (task === null) {
         return Result.fail(new NotFoundError("Task", id));
     }
@@ -104,7 +104,7 @@ const updateTaskDetails = async (
         return validation;
     }
 
-    const task = await tasksRepository.findTaskByIdAndObjId(id, objectiveId);
+    const task = await tasksRepository.findByIdAndObjId(id, objectiveId);
     if (task === null) {
         return Result.fail(new NotFoundError("Task", taskDto.id));
     }
@@ -133,7 +133,7 @@ const updateTaskStatus = async (
         return validation;
     }
 
-    const task = await tasksRepository.findTaskByIdAndObjId(id, objectiveId);
+    const task = await tasksRepository.findByIdAndObjId(id, objectiveId);
     if (task === null) {
         return Result.fail(new NotFoundError("Task", id));
     }
@@ -170,7 +170,7 @@ const deleteTask = async (
         return validation;
     }
 
-    const task = await tasksRepository.findTaskByIdAndObjId(id, objectiveId);
+    const task = await tasksRepository.findByIdAndObjId(id, objectiveId);
     if (task === null) {
         return Result.fail(new NotFoundError("Task", id));
     }

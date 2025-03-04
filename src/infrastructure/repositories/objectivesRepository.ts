@@ -9,3 +9,16 @@ export async function isObjectiveValid(teamId: number, objectiveId: number) {
 
     return objective?.teamId === teamId;
 }
+
+const findByIdAndTeamId = async (id: number, teamId: number) => {
+    return await prisma.objective.findUnique({
+        where: {
+            id,
+            teamId: teamId,
+        },
+    });
+};
+
+export default {
+    findByIdAndTeamId,
+};

@@ -1,6 +1,6 @@
 import prisma from "../prisma/client";
 
-const findTaskByIdAndObjId = async (id: number, objectiveId: number) => {
+const findByIdAndObjId = async (id: number, objectiveId: number) => {
     return prisma.task.findUnique({
         where: {
             id,
@@ -9,4 +9,4 @@ const findTaskByIdAndObjId = async (id: number, objectiveId: number) => {
     });
 };
 
-export default { findTaskByIdAndObjId };
+export default { findByIdAndObjId };
