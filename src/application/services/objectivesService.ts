@@ -8,6 +8,9 @@ import {
 import { ForbiddenError, NotFoundError } from "@/application/resultErrors";
 import { hasMembership } from "@/infrastructure/repositories/membershipsRepository";
 import objectivesRepository from "@/infrastructure/repositories/objectivesRepository";
+import tasksRepository from "@/infrastructure/repositories/tasksRepository";
+import { taskStatus } from "@/domain/constants";
+import { count } from "console";
 
 const validate = async (userId: number, teamId: number) => {
     const has = await hasMembership(userId, teamId);
@@ -129,10 +132,55 @@ const deleteObjective = async (
     return Result.success(null);
 };
 
+const getObjectiveStatus = async (
+    id: number,
+    teamId: number,
+    userDto: UserDto
+) => {
+    const validation = await validate(userDto.id, teamId);
+    if (validation.error) {
+        return validation;
+    }
+
+    const notStarted = await tasksRepository.countAllByObjIdAndStatus(
+        id,
+        taskStatus.NOT_STARTED
+    );
+    const inProgress = await tasksRepository.countAllByObjIdAndStatus(
+        id,
+        taskStatus.IN_PROGRESS
+    );
+    const completed = await tasksRepository.countAllByObjIdAndStatus(
+        id,
+        taskStatus.COMPLETED
+    );
+    const total = notStarted + inProgress + completed;
+    const notStartedPercentage = (notStarted / total) * 100;
+    const inProgressPercentage = (inProgress / total) * 100;
+    const completedPercentage = (completed / total) * 100;
+
+    return Result.success({
+        Total: total,
+        [taskStatus.NOT_STARTED]: {
+            count: notStarted,
+            percentage: notStartedPercentage,
+        },
+        [taskStatus.IN_PROGRESS]: {
+            count: inProgress,
+            percentage: inProgressPercentage,
+        },
+        [taskStatus.COMPLETED]: {
+            count: completed,
+            percentage: completedPercentage,
+        },
+    });
+};
+
 export default {
     createObjective,
     getAllObjectives,
     getObjectiveById,
     updateObjective,
     deleteObjective,
+    getObjectiveStatus,
 };

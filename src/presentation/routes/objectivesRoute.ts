@@ -9,5 +9,6 @@ router.get(PREFIX + "/", objectivesController.getAllObjectives);
 router.get(PREFIX + "/:id", objectivesController.getObjectiveById);
 router.patch(PREFIX + "/:id", objectivesController.updateObjective);
 router.delete(PREFIX + "/:id", objectivesController.deleteObjective);
+router.get(PREFIX + "/:id/status", objectivesController.getObjectiveStatus);
 
 export default router;

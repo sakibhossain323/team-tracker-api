@@ -1,5 +1,6 @@
 import objectivesService from "@/application/services/objectivesService";
 import { Request, Response, NextFunction } from "express";
+import { get } from "http";
 
 const getId = (req: Request) => Number(req.params.id);
 const getTeamId = (req: Request) => Number(req.params.teamId);
@@ -117,10 +118,34 @@ const deleteObjective = async (
     }
 };
 
+const getObjectiveStatus = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const result = await objectivesService.getObjectiveStatus(
+            getId(req),
+            getTeamId(req),
+            req.user!
+        );
+        if (result.success) {
+            res.status(200).send(result.data);
+        } else if (result.error) {
+            res.status(result.error.statusCode).send({
+                message: result.error.message,
+            });
+        }
+    } catch (err) {
+        next(err);
+    }
+};
+
 export default {
     createObjective,
     getAllObjectives,
     getObjectiveById,
     updateObjective,
     deleteObjective,
+    getObjectiveStatus,
 };
