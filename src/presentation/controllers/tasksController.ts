@@ -10,7 +10,7 @@ const createTask = async (req: Request, res: Response, next: NextFunction) => {
         const result = await tasksService.createTask(
             {
                 ...req.body,
-                teamId: getId(req),
+                teamId: getTeamId(req),
                 objectiveId: getObjId(req),
             },
             req.user!
