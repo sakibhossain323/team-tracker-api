@@ -1,6 +1,5 @@
 import { Router } from "express";
-import passport from "@/presentation/authConfig/localStrategy";
-import prisma from "@/infrastructure/prisma/client";
+import passport, { register } from "@/presentation/authConfig/localStrategy";
 
 const router = Router();
 const PREFIX = "/api/auth";
@@ -8,13 +7,7 @@ const PREFIX = "/api/auth";
 router.post(PREFIX + "/register", async (req, res) => {
     try {
         const { email, password } = req.body;
-        await prisma.user.create({
-            data: {
-                email: email,
-                username: email,
-                password: password,
-            },
-        });
+        await register(email, email, password);
         res.status(201).send({ message: "Registration Successful!" });
     } catch (error) {
         console.error(error);
@@ -23,7 +16,6 @@ router.post(PREFIX + "/register", async (req, res) => {
 });
 
 router.post(PREFIX + "/login", passport.authenticate("local"), (req, res) => {
-    console.log(req.body);
     res.status(200).send({ message: "Login Successful!" });
 });
 

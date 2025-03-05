@@ -1,6 +1,7 @@
 import prisma from "@/infrastructure/prisma/client";
 import passport from "passport";
 import { Strategy } from "passport-local";
+import bcrypt from "bcryptjs";
 
 passport.use(
     new Strategy(async (username, password, done) => {
@@ -9,15 +10,18 @@ passport.use(
                 username,
             },
         });
-        if (user && user.password === password) {
-            return done(null, {
-                id: user.id,
-                username: user.username,
-                email: user.email,
-            });
-        } else {
+        if (!user) {
             return done(null, false);
         }
+        const isValid = await bcrypt.compare(password, user.password);
+        if (!isValid) {
+            return done(null, false);
+        }
+        return done(null, {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+        });
     })
 );
 
@@ -40,3 +44,18 @@ passport.deserializeUser((user: Express.User, done) => {
 });
 
 export default passport;
+
+export async function register(
+    username: string,
+    email: string,
+    password: string
+) {
+    const passwordHash = await bcrypt.hash(password, 10);
+    await prisma.user.create({
+        data: {
+            username,
+            email,
+            password: passwordHash,
+        },
+    });
+}
