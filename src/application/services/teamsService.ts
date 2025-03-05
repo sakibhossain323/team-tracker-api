@@ -1,6 +1,7 @@
 import prisma from "@/infrastructure/prisma/client";
 import { CreateTeamDto, Result, UserDto } from "@/application/dtos";
 import { ForbiddenError, NotFoundError } from "@/application/resultErrors";
+import membershipsRepository from "@/infrastructure/repositories/membershipsRepository";
 
 const createTeam = async (teamDto: CreateTeamDto, userDto: UserDto) => {
     return await prisma.team.create({
@@ -36,6 +37,14 @@ const getAllTeams = async (user: UserDto) => {
 };
 
 const getTeamById = async (id: number, user: UserDto) => {
+    const membership = await membershipsRepository.findByUserIdAndTeamId(
+        user.id,
+        id
+    );
+    if (membership === null) {
+        return Result.fail(new ForbiddenError());
+    }
+
     const team = await prisma.team.findUnique({
         where: {
             id: id,
@@ -43,18 +52,6 @@ const getTeamById = async (id: number, user: UserDto) => {
     });
     if (team === null) {
         return Result.fail(new NotFoundError("Team", id));
-    }
-    const membership = await prisma.membership.findUnique({
-        where: {
-            userId_teamId: {
-                userId: user.id,
-                teamId: id,
-            },
-        },
-    });
-
-    if (membership === null) {
-        return Result.fail(new ForbiddenError());
     }
 
     return Result.success(team);

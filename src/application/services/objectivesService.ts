@@ -6,14 +6,17 @@ import {
     UserDto,
 } from "@/application/dtos";
 import { ForbiddenError, NotFoundError } from "@/application/resultErrors";
-import { hasMembership } from "@/infrastructure/repositories/membershipsRepository";
+import membershipsRepository from "@/infrastructure/repositories/membershipsRepository";
 import objectivesRepository from "@/infrastructure/repositories/objectivesRepository";
 import tasksRepository from "@/infrastructure/repositories/tasksRepository";
 import { taskStatus } from "@/domain/constants";
 
 const validate = async (userId: number, teamId: number) => {
-    const has = await hasMembership(userId, teamId);
-    if (!has) {
+    const membership = await membershipsRepository.findByUserIdAndTeamId(
+        userId,
+        teamId
+    );
+    if (membership === null) {
         return Result.fail(new ForbiddenError());
     }
 
