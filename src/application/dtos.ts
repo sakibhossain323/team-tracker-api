@@ -24,6 +24,12 @@ export type CreateTeamDto = {
     description: string | null;
 };
 
+export type UpdateTeamDto = {
+    id: number;
+    name: string;
+    description: string | null;
+};
+
 export type CreateObjectiveDto = {
     title: string;
     description: string | null;

@@ -8,6 +8,5 @@ router.post(PREFIX + "/", teamsController.createTeam);
 router.get(PREFIX + "/", teamsController.getAllTeams);
 router.get(PREFIX + "/:id", teamsController.getTeamById);
 router.patch(PREFIX + "/:id", teamsController.updateTeam);
-router.delete(PREFIX + "/:id", teamsController.deleteTeam);
 
 export default router;

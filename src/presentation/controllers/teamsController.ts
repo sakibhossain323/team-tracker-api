@@ -1,11 +1,10 @@
-import e from "express";
+import { Request, Response, NextFunction } from "express";
 import teamsService from "@/application/services/teamsService";
+import { get } from "http";
 
-const createTeam = async (
-    req: e.Request,
-    res: e.Response,
-    next: e.NextFunction
-) => {
+const getId = (req: Request) => Number(req.params.id);
+
+const createTeam = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const result = await teamsService.createTeam(req.body, req.user!);
         res.status(201).send(result);
@@ -14,11 +13,7 @@ const createTeam = async (
     }
 };
 
-const getAllTeams = async (
-    req: e.Request,
-    res: e.Response,
-    next: e.NextFunction
-) => {
+const getAllTeams = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const teams = await teamsService.getAllTeams(req.user!);
         res.status(200).send(teams);
@@ -27,14 +22,28 @@ const getAllTeams = async (
     }
 };
 
-const getTeamById = async (
-    req: e.Request,
-    res: e.Response,
-    next: e.NextFunction
-) => {
+const getTeamById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const result = await teamsService.getTeamById(
-            Number(req.params.id),
+        const result = await teamsService.getTeamById(getId(req), req.user!);
+        if (result.success) {
+            res.status(200).send(result.data);
+        } else if (result.error) {
+            res.status(result.error.statusCode).send({
+                message: result.error.message,
+            });
+        }
+    } catch (err) {
+        next(err);
+    }
+};
+
+const updateTeam = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const result = await teamsService.updateTeamDetails(
+            {
+                id: getId(req),
+                ...req.body,
+            },
             req.user!
         );
         if (result.success) {
@@ -49,34 +58,9 @@ const getTeamById = async (
     }
 };
 
-const updateTeam = async (
-    req: e.Request,
-    res: e.Response,
-    next: e.NextFunction
-) => {
-    try {
-        res.status(200).send({ message: "Updated!" });
-    } catch (err) {
-        next(err);
-    }
-};
-
-const deleteTeam = async (
-    req: e.Request,
-    res: e.Response,
-    next: e.NextFunction
-) => {
-    try {
-        res.status(204).send();
-    } catch (err) {
-        next(err);
-    }
-};
-
 export default {
     createTeam,
     getAllTeams,
     getTeamById,
     updateTeam,
-    deleteTeam,
 };
