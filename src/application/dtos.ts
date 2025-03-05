@@ -24,7 +24,7 @@ export type CreateTeamDto = {
     description: string | null;
 };
 
-export type UpdateTeamDto = {
+export type UpdateTeamDetailsDto = {
     id: number;
     name: string;
     description: string | null;
