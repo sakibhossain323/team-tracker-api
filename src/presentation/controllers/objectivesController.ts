@@ -11,7 +11,6 @@ const createObjective = async (
     next: NextFunction
 ) => {
     try {
-        console.log(req.body);
         const result = await objectivesService.createObjective(
             { ...req.body, teamId: getTeamId(req) },
             req.user!

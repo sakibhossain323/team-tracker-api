@@ -4,14 +4,13 @@ import passport, { register } from "@/presentation/authConfig/localStrategy";
 const router = Router();
 const PREFIX = "/api/auth";
 
-router.post(PREFIX + "/register", async (req, res) => {
+router.post(PREFIX + "/register", async (req, res, next) => {
     try {
         const { email, password } = req.body;
         await register(email, email, password);
         res.status(201).send({ message: "Registration Successful!" });
     } catch (error) {
-        console.error(error);
-        res.status(500).send({ message: "Internal Server Error" });
+        next(error);
     }
 });
 
@@ -21,7 +20,7 @@ router.post(PREFIX + "/login", passport.authenticate("local"), (req, res) => {
 
 router.post(PREFIX + "/logout", (req, res) => {
     req.logout((err) => {
-        if (err) console.log(err);
+        if (err) console.error(err);
     });
     res.status(200).send({ message: "Logout Successful!" });
 });

@@ -9,7 +9,6 @@ export default function (
     if (err) {
         console.error(err);
         res.status(500).send({ message: err.message });
-        return;
     }
     next();
 }
