@@ -57,7 +57,7 @@ model Task {
   title        String
   description  String?
   createdAt    DateTime @default(now())
-  objective    Objective   @relation(fields: [objectiveId], references: [id])
+  objective    Objective   @relation(fields: [objectiveId], references: [id], onDelete: Cascade)
   objectiveId  Int
   assignee     User?   @relation(fields: [assigneeId], references: [id])
   assigneeId   Int?
