@@ -1,5 +1,6 @@
 import { Router } from "express";
 import passport, { register } from "@/presentation/authConfig/localStrategy";
+import passportGoogle from "@/presentation/authConfig/googleStrategy";
 
 const router = Router();
 const PREFIX = "/api/auth";
@@ -17,6 +18,22 @@ router.post(PREFIX + "/register", async (req, res, next) => {
 router.post(PREFIX + "/login", passport.authenticate("local"), (req, res) => {
     res.status(200).send({ message: "Login Successful!" });
 });
+
+router.get(
+    PREFIX + "/google",
+    passportGoogle.authenticate("google", { scope: ["email", "profile"] }),
+    (req, res) => {
+        res.status(200).send();
+    }
+);
+
+router.get(
+    PREFIX + "/google/redirect",
+    passportGoogle.authenticate("google"),
+    (req, res) => {
+        res.status(200).send({ message: "Login Successful!" });
+    }
+);
 
 router.post(PREFIX + "/logout", (req, res) => {
     req.logout((err) => {

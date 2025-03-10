@@ -21,6 +21,7 @@
         "express": "^4.21.2",
         "express-session": "^1.18.1",
         "passport": "^0.7.0",
+        "passport-google-oauth": "^2.0.0",
         "passport-local": "^1.0.0"
     },
     "devDependencies": {
@@ -31,6 +32,7 @@
         "@types/express-session": "^1.18.1",
         "@types/node": "^22.13.9",
         "@types/passport": "^1.0.17",
+        "@types/passport-google-oauth": "^1.0.45",
         "@types/passport-local": "^1.0.38",
         "prisma": "^6.4.1",
         "ts-node": "^10.9.2",
