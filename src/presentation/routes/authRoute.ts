@@ -6,8 +6,8 @@ const PREFIX = "/api/auth";
 
 router.post(PREFIX + "/register", async (req, res, next) => {
     try {
-        const { email, password } = req.body;
-        await register(email, email, password);
+        const { email, username, password } = req.body;
+        await register(username, email, password);
         res.status(201).send({ message: "Registration Successful!" });
     } catch (error) {
         next(error);
