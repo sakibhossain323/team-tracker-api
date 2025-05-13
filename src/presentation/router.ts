@@ -6,7 +6,9 @@ import protectRoute from "./authConfig/protectRoute";
 import tasksRoute from "./routes/tasksRoute";
 
 const router = Router();
-
+router.get("/health", (req, res) => {
+    res.status(200).json({ status: "OK" });
+});
 router.use(authRoute);
 router.use(protectRoute, teamsRoute);
 router.use(protectRoute, objectivesRoute);
